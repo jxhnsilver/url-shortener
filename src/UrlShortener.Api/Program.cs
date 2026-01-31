@@ -1,3 +1,6 @@
+using UrlShortener.Application;
+using UrlShortener.Infrastructure;
+
 namespace UrlShortener.Api
 {
     public class Program
@@ -7,6 +10,9 @@ namespace UrlShortener.Api
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+
+            builder.Services.AddApplication(builder.Configuration);
+            builder.Services.AddInfrastructure(builder.Configuration);
 
             builder.Services.AddControllers();
 

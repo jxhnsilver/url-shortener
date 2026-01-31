@@ -1,5 +1,8 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="src/UrlShortener.Api/UrlShortener.Api.csproj" Id="9ad91f89-a36a-4709-beb6-740c271e19cb" />
+    <Project Path="src/UrlShortener.Application/UrlShortener.Application.csproj" Id="9ded416e-7b92-4e17-aeba-6b31b119bfd2" />
+    <Project Path="src/UrlShortener.Domain/UrlShortener.Domain.csproj" Id="205144ac-d60f-4cbd-a243-4e1124fbb69f" />
+    <Project Path="src/UrlShortener.Infrastructure/UrlShortener.Infrastructure.csproj" Id="a135be36-8826-4018-a3e1-8a64ed6179da" />
   </Folder>
 </Solution>
