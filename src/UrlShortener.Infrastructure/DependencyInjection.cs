@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using UrlShortener.Application.Services.Implementations;
-using UrlShortener.Application.Services.Interfaces;
 using UrlShortener.Domain.Interfaces;
 using UrlShortener.Infrastructure.Context;
 using UrlShortener.Infrastructure.Repositories;
