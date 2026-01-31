@@ -10,6 +10,7 @@ namespace UrlShortener.Application.Services.Implementations
     public class UrlShortenerService : IUrlShortenerService
     {
         private const int ShortCodeLength = 7;
+        private const int MaxAttempts = 5;
 
         private readonly IShortUrlRepository _shortUrlRepository;
         private readonly IShortCodeGenerator _shortCodeGenerator;
@@ -34,8 +35,7 @@ namespace UrlShortener.Application.Services.Implementations
                 return new CreateShortUrlResponse(fullShortUrl);
             }
 
-            // TODO: Add max attempts limit for short code generation
-            while (true) 
+            for (int attempt = 0; attempt < MaxAttempts; attempt++)
             {
                 var shortCode = _shortCodeGenerator.Generate(ShortCodeLength);
                 if (!await _shortUrlRepository.ExistsByShortCodeAsync(shortCode))
@@ -48,6 +48,8 @@ namespace UrlShortener.Application.Services.Implementations
                     return new CreateShortUrlResponse(fullShortUrl);
                 }
             }
+
+            throw new InvalidOperationException($"Failed to generate unique short code after {MaxAttempts} attempts.");
         }
 
         public async Task<GetOriginalUrlResponse> GetOriginalUrl(GetOriginalUrlRequest request)
