@@ -4,15 +4,30 @@ namespace UrlShortener.Application.Services.Implementations
 {
     public class RandomShortCodeGenerator : IShortCodeGenerator
     {
-        private const string Alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        private readonly Random _random = Random.Shared;
+        public const string Alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        private const int MinCodeLength = 6;
+        private const int MaxCodeLength = 10;
 
-        public string Generate(int shortCodeLength)
+        private readonly Random _random = Random.Shared;
+        private readonly int _codeLength;
+
+        public RandomShortCodeGenerator(int codeLength)
         {
-            var codeChars = new char[shortCodeLength];
-            for (int i = 0; i < shortCodeLength; i++)
+            if (codeLength < MinCodeLength || codeLength > MaxCodeLength)
+                throw new ArgumentOutOfRangeException(
+                    nameof(codeLength),
+                    $"Short code length must be between {MinCodeLength} and {MaxCodeLength}."
+                    );
+
+            _codeLength = codeLength;
+        }
+
+        public string Generate()
+        {
+            var codeChars = new char[_codeLength];
+            for (int i = 0; i < _codeLength; i++)
             {
-                int randomIndex = _random.Next(Alphabet.Length - 1);
+                int randomIndex = _random.Next(Alphabet.Length);
                 codeChars[i] = Alphabet[randomIndex];
             }
 

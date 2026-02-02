@@ -9,12 +9,12 @@ namespace UrlShortener.Application.Services.Implementations
 {
     public class UrlShortenerService : IUrlShortenerService
     {
-        private const int ShortCodeLength = 7;
         private const int MaxAttempts = 5;
 
         private readonly IShortUrlRepository _shortUrlRepository;
         private readonly IShortCodeGenerator _shortCodeGenerator;
         private readonly string _baseUrl;
+
         public UrlShortenerService(
             IShortUrlRepository shortUrlRepository, 
             IShortCodeGenerator shortCodeGenerator, 
@@ -28,6 +28,7 @@ namespace UrlShortener.Application.Services.Implementations
 
         public async Task<CreateShortUrlResponse> CreateShortUrl(CreateShortUrlRequest request)
         {
+            // TODO: Add request validation
             var existingShortUrl = await _shortUrlRepository.GetByOriginalUrlAsync(request.OriginalUrl);
             if (existingShortUrl is not null)
             {
@@ -37,7 +38,7 @@ namespace UrlShortener.Application.Services.Implementations
 
             for (int attempt = 0; attempt < MaxAttempts; attempt++)
             {
-                var shortCode = _shortCodeGenerator.Generate(ShortCodeLength);
+                var shortCode = _shortCodeGenerator.Generate();
                 if (!await _shortUrlRepository.ExistsByShortCodeAsync(shortCode))
                 {
                     var shortUrl = ShortUrl.Create(request.OriginalUrl, shortCode);
@@ -54,6 +55,7 @@ namespace UrlShortener.Application.Services.Implementations
 
         public async Task<GetOriginalUrlResponse> GetOriginalUrl(GetOriginalUrlRequest request)
         {
+            // TODO: Add request validation
             var shortUrl = await _shortUrlRepository.GetByShortCodeAsync(request.Code);
             return new GetOriginalUrlResponse(shortUrl?.OriginalUrl);
         }

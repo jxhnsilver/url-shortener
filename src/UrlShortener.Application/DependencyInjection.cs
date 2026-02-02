@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using UrlShortener.Application.Services.Implementations;
 using UrlShortener.Application.Services.Interfaces;
 using UrlShortener.Application.Settings;
@@ -14,7 +15,11 @@ namespace UrlShortener.Application
 
             services.AddScoped<IUrlShortenerService, UrlShortenerService>();
 
-            services.AddSingleton<IShortCodeGenerator, RandomShortCodeGenerator>();
+            services.AddSingleton<IShortCodeGenerator>(sp =>
+            {
+                var settings = sp.GetRequiredService<IOptions<UrlShortenerSettings>>().Value;
+                return new RandomShortCodeGenerator(settings.CodeLength);
+            });
 
             return services;
         }
